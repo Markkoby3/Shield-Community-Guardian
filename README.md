@@ -3,7 +3,7 @@ Mark Osei Kwabi
 
 Community Safety and Digital Wellness
 
-I worked on it for 8-10 hours
+I worked on it for 6-9 hours
 
 YOUTUBE LINK:https://youtu.be/x2_9Z9yxQmM
 
