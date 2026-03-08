@@ -2,6 +2,7 @@
 Mark Osei Kwabi
 Community Safety and Digital Wellness
 I worked on it for 8-10 hours
+YOUTUBE LINK:https://youtu.be/x2_9Z9yxQmM
 
 > AI-powered community safety alert system — calm, private, actionable.
 
