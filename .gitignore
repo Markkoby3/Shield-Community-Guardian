@@ -1,0 +1,33 @@
+# Environment — never commit real keys
+.env
+
+# Virtual environment
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Database & data files generated at runtime
+data/alerts.db
+data/*.db
+
+# ChromaDB persisted collections
+chroma_db/
+.chroma/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage

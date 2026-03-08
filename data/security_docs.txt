@@ -1,0 +1,41 @@
+Phishing attacks trick users into revealing credentials via fake emails or websites.
+Always verify the sender's email address carefully. Look for misspellings in the domain name.
+Never click links in unsolicited emails — navigate directly to the website instead.
+Enable two-factor authentication on all important accounts.
+Report phishing attempts to the Anti-Phishing Working Group at reportphishing@apwg.org.
+
+Data breaches occur when unauthorized parties gain access to sensitive personal or financial information.
+If you suspect your data was breached, change your passwords immediately starting with email and banking.
+Enable fraud alerts with the major credit bureaus: Equifax, Experian, and TransUnion.
+Monitor your bank and credit card statements closely for the next 12 months.
+Consider placing a credit freeze if sensitive information like your Social Security number was exposed.
+
+Scams targeting community members often involve fake charities, lottery winnings, or impersonation of government officials.
+Legitimate organizations will never ask for payment via gift cards or wire transfer.
+Verify any charity before donating by checking Charity Navigator or GuideStar.
+If someone claims to be from the IRS or Social Security Administration, hang up and call the official number.
+Report scams to the FTC at reportfraud.ftc.gov.
+
+Identity theft happens when someone uses your personal information without your permission.
+Review your credit reports annually at AnnualCreditReport.com.
+Shred documents containing personal information before discarding them.
+Use strong unique passwords for every account and store them in a password manager.
+Watch for unexpected bills, calls from debt collectors, or unfamiliar accounts on your credit report.
+
+Local crime prevention requires community awareness and cooperation.
+If you witness a crime in progress, call 911 immediately — do not intervene yourself.
+Report suspicious activity to your local non-emergency police line.
+Join or start a Neighborhood Watch program to coordinate with neighbors.
+Keep your home secure: lock doors and windows, use exterior lighting, and avoid advertising vacations on social media.
+
+Infrastructure outages including power, water, and internet can affect community safety.
+Keep a 72-hour emergency supply kit with water, food, medications, and a battery-powered radio.
+Know your local emergency shelter locations in case of extended outages.
+Sign up for your local government's emergency alert system for real-time notifications.
+During power outages, never use generators or camp stoves indoors due to carbon monoxide risk.
+
+Cybersecurity best practices for residents and small businesses.
+Keep all software and operating systems updated — most breaches exploit known vulnerabilities.
+Use a VPN when connecting to public Wi-Fi networks.
+Back up important data using the 3-2-1 rule: 3 copies, on 2 different media, with 1 offsite.
+Be cautious about what personal information you share on social media.

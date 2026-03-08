@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Community Guardian</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    header { background: #1e293b; border-bottom: 1px solid #334155; padding: 1rem 2rem; display: flex; align-items: center; gap: 0.75rem; }
+    header h1 { font-size: 1.4rem; font-weight: 700; color: #f1f5f9; }
+    header .tagline { font-size: 0.78rem; color: #64748b; margin-left: auto; }
+    nav { display: flex; gap: 0.5rem; padding: 1rem 2rem; border-bottom: 1px solid #1e293b; background: #0f172a; }
+    nav button { padding: 0.4rem 1rem; border-radius: 6px; border: 1px solid #334155; background: transparent; color: #94a3b8; cursor: pointer; font-size: 0.875rem; transition: all 0.15s; }
+    nav button.active, nav button:hover { background: #3b82f6; border-color: #3b82f6; color: white; }
+    main { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+    .section { display: none; }
+    .section.active { display: block; }
+    h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; color: #f1f5f9; }
+    textarea, input[type="text"] { width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.75rem; font-size: 0.875rem; outline: none; resize: vertical; }
+    textarea:focus, input[type="text"]:focus { border-color: #3b82f6; }
+    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.4rem; margin-top: 0.75rem; }
+    button.primary { margin-top: 1rem; padding: 0.6rem 1.5rem; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: background 0.15s; }
+    button.primary:hover { background: #2563eb; }
+    button.primary:disabled { background: #475569; cursor: not-allowed; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+    .card-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .card-meta { font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem; }
+    .digest-summary { font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.75rem; line-height: 1.5; }
+    .checklist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.4rem; }
+    .checklist li { display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.82rem; color: #94a3b8; line-height: 1.4; }
+    .step-num { flex-shrink: 0; width: 1.4rem; height: 1.4rem; border-radius: 50%; background: #1d4ed8; color: white; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 0.05rem; }
+    .step-high .step-num { background: #991b1b; }
+    .step-medium .step-num { background: #92400e; }
+    .badge { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
+    .badge-high     { background: #7f1d1d; color: #fca5a5; }
+    .badge-medium   { background: #78350f; color: #fcd34d; }
+    .badge-low      { background: #14532d; color: #86efac; }
+    .badge-ai       { background: #1e3a5f; color: #93c5fd; }
+    .badge-fallback { background: #2d1b69; color: #c4b5fd; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+    .stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1.25rem; text-align: center; }
+    .stat-number { font-size: 2rem; font-weight: 700; color: #3b82f6; }
+    .stat-label  { font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
+    .search-row { display: flex; gap: 0.5rem; }
+    .search-row input { flex: 1; }
+    .privacy-note { font-size: 0.75rem; color: #475569; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.6rem 0.9rem; margin-bottom: 1rem; }
+    .privacy-note strong { color: #64748b; }
+    #status { margin-top: 0.75rem; font-size: 0.8rem; color: #64748b; min-height: 1.2em; }
+    .error   { color: #f87171 !important; }
+    .success { color: #4ade80 !important; }
+    .empty   { text-align: center; color: #475569; padding: 2rem; font-size: 0.875rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span>shield</span>
+  <h1>Community Guardian</h1>
+  <span class="tagline">AI-powered community safety — calm, private, actionable</span>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('analyze', this)">Submit Alert</button>
+  <button onclick="showTab('search', this)">Search</button>
+  <button onclick="showTab('stats', this)">Dashboard</button>
+  <button onclick="showTab('circle', this)">Safe Circle</button>
+</nav>
+
+<main>
+
+  <!-- Submit Alert -->
+  <div id="analyze" class="section active">
+    <h2>Submit Community Alert</h2>
+    <label>Your Location</label>
+    <input type="text" id="user-location" placeholder="e.g. Austin" />
+    <label>Reports (one per line)</label>
+    <textarea id="reports-input" rows="6" placeholder="Police warn about phishing emails targeting Gmail users&#10;Power outage reported downtown&#10;Scam callers impersonating the IRS"></textarea>
+    <label>Report Location</label>
+    <input type="text" id="report-location" placeholder="e.g. Austin or national" />
+    <button class="primary" onclick="submitAlerts()">Analyze Alerts</button>
+    <div id="status"></div>
+    <div id="analyze-results" style="margin-top:1.25rem"></div>
+  </div>
+
+  <!-- Search -->
+  <div id="search" class="section">
+    <h2>Search Alerts</h2>
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="Search by keyword..." onkeydown="if(event.key==='Enter') doSearch()" />
+      <button class="primary" style="margin-top:0" onclick="doSearch()">Search</button>
+    </div>
+    <div id="search-results" style="margin-top:1.25rem"></div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="stats" class="section">
+    <h2>Alert Dashboard</h2>
+    <button class="primary" style="margin-bottom:1.25rem" onclick="loadStats()">Refresh</button>
+    <div id="stats-content"><p class="empty">Click Refresh to load stats.</p></div>
+  </div>
+
+  <!-- Safe Circle -->
+  <div id="circle" class="section">
+    <h2>Safe Circle</h2>
+    <div class="privacy-note">
+      <strong>Privacy:</strong> Messages are encrypted at rest and only visible to members sharing your Circle ID. Location is never stored in plain text.
+    </div>
+    <label>Circle ID <span style="color:#475569">(shared passphrase with your trusted group)</span></label>
+    <input type="text" id="circle-group" placeholder="e.g. my-family-2024" />
+    <label>New Message</label>
+    <textarea id="circle-input" rows="3" placeholder="I'm safe. Sheltering at home."></textarea>
+    <button class="primary" onclick="sendMessage()">Send Encrypted</button>
+    <div id="circle-status"></div>
+    <div style="margin-top:1.5rem">
+      <h2>Circle Messages</h2>
+      <button class="primary" style="margin-bottom:1rem" onclick="loadMessages()">Load Messages</button>
+      <div id="circle-messages"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const API = "http://localhost:8000/api/v1";
+
+  function showTab(id, btn) {
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    btn.classList.add("active");
+  }
+
+  function setStatus(el, msg, type) {
+    el.textContent = msg;
+    el.className = type || "";
+  }
+
+  function severityBadge(s) {
+    return '<span class="badge badge-' + s + '">' + s + '</span>';
+  }
+
+  function renderDigest(digest, severity) {
+    if (!digest) return "";
+    var stepClass = severity === "high" ? "step-high" : severity === "medium" ? "step-medium" : "";
+    var steps = (digest.steps || []).map(function(s, i) {
+      return '<li class="' + stepClass + '"><span class="step-num">' + (i + 1) + '</span><span>' + s + '</span></li>';
+    }).join("");
+    return '<p class="digest-summary">' + (digest.summary || "") + '</p><ul class="checklist">' + steps + '</ul>';
+  }
+
+  async function submitAlerts() {
+    var status = document.getElementById("status");
+    var resultsEl = document.getElementById("analyze-results");
+    var lines = document.getElementById("reports-input").value.trim().split("\n").filter(Boolean);
+    var location = document.getElementById("report-location").value.trim() || "national";
+    var userLocation = document.getElementById("user-location").value.trim() || "national";
+
+    if (!lines.length) { setStatus(status, "Enter at least one report.", "error"); return; }
+    setStatus(status, "Analyzing...");
+    resultsEl.innerHTML = "";
+
+    try {
+      var res = await fetch(API + "/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reports: lines.map(function(t) { return { text: t, location: location }; }), user_location: userLocation })
+      });
+      var data = await res.json();
+      setStatus(status, data.processed + " alert(s) processed, " + data.filtered_out + " filtered as noise.", "success");
+
+      if (!data.alerts.length) {
+        resultsEl.innerHTML = '<p class="empty">No relevant alerts found for your location.</p>';
+        return;
+      }
+      resultsEl.innerHTML = data.alerts.map(function(a) {
+        return '<div class="card"><div class="card-title">' + a.alert + '</div>' +
+          '<div class="card-meta">Location: ' + a.location + ' &nbsp;·&nbsp; ' + severityBadge(a.severity) +
+          ' &nbsp;·&nbsp; <span class="badge badge-' + a.method.toLowerCase() + '">' + a.method + '</span>' +
+          ' &nbsp;·&nbsp; <em style="color:#475569">' + a.category.replace("_", " ") + '</em></div>' +
+          renderDigest(a.digest, a.severity) + '</div>';
+      }).join("");
+    } catch (e) {
+      setStatus(status, "Error: " + e.message, "error");
+    }
+  }
+
+  async function doSearch() {
+    var keyword = document.getElementById("search-input").value.trim();
+    var resultsEl = document.getElementById("search-results");
+    if (!keyword) return;
+    resultsEl.innerHTML = '<p class="empty">Searching...</p>';
+    try {
+      var res = await fetch(API + "/search?keyword=" + encodeURIComponent(keyword));
+      var data = await res.json();
+      if (!data.length) { resultsEl.innerHTML = '<p class="empty">No results found.</p>'; return; }
+      resultsEl.innerHTML = data.map(function(a) {
+        return '<div class="card"><div class="card-title">' + (a.text || a.alert) + '</div>' +
+          '<div class="card-meta">Location: ' + a.location + ' &nbsp;·&nbsp; ' + severityBadge(a.severity) + '</div>' +
+          renderDigest(a.digest, a.severity) + '</div>';
+      }).join("");
+    } catch (e) {
+      resultsEl.innerHTML = '<p class="empty error">Error: ' + e.message + '</p>';
+    }
+  }
+
+  async function loadStats() {
+    var el = document.getElementById("stats-content");
+    el.innerHTML = '<p class="empty">Loading...</p>';
+    try {
+      var res = await fetch(API + "/stats");
+      var d = await res.json();
+      var sevCards = Object.entries(d.by_severity || {}).map(function(e) {
+        return '<div class="stat-card"><div class="stat-number">' + e[1] + '</div><div class="stat-label">' + e[0] + '</div></div>';
+      }).join("");
+      var catCards = Object.entries(d.by_category || {}).map(function(e) {
+        return '<div class="stat-card"><div class="stat-number">' + e[1] + '</div><div class="stat-label">' + e[0].replace("_", " ") + '</div></div>';
+      }).join("");
+      var recentCards = (d.recent || []).map(function(a) {
+        return '<div class="card"><div class="card-title">' + a.text + '</div>' +
+          '<div class="card-meta">Location: ' + a.location + ' &nbsp;·&nbsp; ' + severityBadge(a.severity) +
+          ' &nbsp;·&nbsp; ' + new Date(a.created_at).toLocaleString() + '</div></div>';
+      }).join("") || '<p class="empty">No recent alerts.</p>';
+      el.innerHTML =
+        '<div class="stats-grid"><div class="stat-card"><div class="stat-number">' + d.total_alerts + '</div><div class="stat-label">Total Alerts</div></div>' + sevCards + '</div>' +
+        '<h2 style="margin-bottom:0.75rem">By Category</h2><div class="stats-grid" style="margin-bottom:1.5rem">' + (catCards || '<p class="empty">No data.</p>') + '</div>' +
+        '<h2 style="margin-bottom:0.75rem">Recent Alerts</h2>' + recentCards;
+    } catch (e) {
+      el.innerHTML = '<p class="empty error">Error: ' + e.message + '</p>';
+    }
+  }
+
+  async function sendMessage() {
+    var msg = document.getElementById("circle-input").value.trim();
+    var group_id = document.getElementById("circle-group").value.trim();
+    var status = document.getElementById("circle-status");
+    if (!group_id) { setStatus(status, "Enter a Circle ID first.", "error"); return; }
+    if (!msg) { setStatus(status, "Enter a message.", "error"); return; }
+    setStatus(status, "Encrypting and sending...");
+    try {
+      var res = await fetch(API + "/safe-circle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, group_id: group_id })
+      });
+      var data = await res.json();
+      setStatus(status, "Sent. " + data.message_count + " message(s) in your circle.", "success");
+      document.getElementById("circle-input").value = "";
+    } catch (e) {
+      setStatus(status, "Error: " + e.message, "error");
+    }
+  }
+
+  async function loadMessages() {
+    var group_id = document.getElementById("circle-group").value.trim();
+    var el = document.getElementById("circle-messages");
+    var status = document.getElementById("circle-status");
+    if (!group_id) { setStatus(status, "Enter a Circle ID first.", "error"); return; }
+    el.innerHTML = '<p class="empty">Decrypting messages...</p>';
+    try {
+      var res = await fetch(API + "/safe-circle/" + encodeURIComponent(group_id));
+      var data = await res.json();
+      if (!data.messages.length) { el.innerHTML = '<p class="empty">No messages in this circle yet.</p>'; return; }
+      el.innerHTML = data.messages.map(function(m) {
+        return '<div class="card"><div style="font-size:0.85rem;color:#cbd5e1">[encrypted] ' + m + '</div></div>';
+      }).join("");
+    } catch (e) {
+      el.innerHTML = '<p class="empty error">Error: ' + e.message + '</p>';
+    }
+  }
+</script>
+</body>
+</html>
